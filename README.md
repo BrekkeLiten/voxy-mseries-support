@@ -86,7 +86,7 @@ Without `-Dvoxy.forceMetal=true` (or the environment variable
 | Minecraft render distance | 8–12 chunks | 12–16 chunks | 32 chunks |
 | Voxy render distance (menu value) | 256–512 chunks (512 is the default) | 512–1024 chunks | 2016 chunks |
 | Voxy *Pixels² of subdivision size* | 128 | 96 | 96 |
-| Shader pack | none | BSL with *Shadow Distance* 128 and *Shadow Resolution* 1024† | BSL defaults |
+| Shader pack | none | BSL with *Shadow Distance* 128 and *Shadowmap Quality* Low (1K)† | BSL defaults |
 | Window | about 1080p | Retina window | 2848×1284 window |
 | java process in Activity Monitor | ≈7–9 GB† | ≈9–12 GB† | ≈12–13 GB in a world with `-Xmx6G`, ≈15–16 GB with the default 12 GB limit; ≈1.6 GB before the first world (measured) |
 | CPU (Activity Monitor, 100% = one core) | | | 110–230% while playing, 50–100% on the pause menu (measured, 16-core M4 Max) |
@@ -106,7 +106,7 @@ Without `-Dvoxy.forceMetal=true` (or the environment variable
   about 3 GB and played smoothly in testing.
 - A lower Minecraft render distance moves work to Voxy, which draws far
   terrain much more cheaply.
-- With BSL, lower *Fog Density LOD* to about 0.25 (see Known issues).
+- With BSL, lower *LOD Density* to about 0.25 (see Known issues).
 
 **Measured frame rates (Tested tier, BSL defaults, Voxy render distance
 2016 chunks, subdivision 96, vsync on at 120 Hz):** median about 37 FPS
@@ -188,9 +188,12 @@ The Metal port is checked against a test plan of 65 tests in nine phases:
 8. World generation with Chunky.
 9. The release jar in a clean launcher profile.
 
-The plan runs on an Apple M4 Max, and each test's result is recorded. The
-notes below come from that testing and explain log messages that look
-alarming but are not errors.
+The plan runs on an Apple M4 Max, and each test's result is recorded.
+**You can help test it on your own Mac:** the
+[testing guide](docs/testing/README.md) has a short player track for a normal
+launcher and the full developer track, and results go in a *Test report*
+issue. The notes below come from that testing and explain log messages that
+look alarming but are not errors.
 
 ### Log messages checked during testing
 
@@ -239,8 +242,8 @@ alarming but are not errors.
   (milestone "Native Iris shader contract on Metal").
 - **BSL fog tuning for LOD view distances**: BSL applies its full fog density
   across LOD distances by default, washing the far field out white. Lower
-  *Shader Pack Settings → Fog → More Fog Settings → Fog Density LOD* to
-  ~0.25 (BSL added that slider specifically for LOD mods). Equivalent file
+  *Shader Pack Settings → Environment → Fog → More Fog Density Config → LOD
+  Density* to ~0.25 (BSL added that slider specifically for LOD mods). Equivalent file
   setting: `FOG_DENSITY_LOD=0.25` in `shaderpacks/<pack>.zip.txt`.
 
 ## Documentation
@@ -249,6 +252,8 @@ alarming but are not errors.
   root-cause/fix table, the full environment-variable reference, backlog.
 - [`docs/MIGRATION-HISTORY.md`](docs/MIGRATION-HISTORY.md) — the complete
   journey: every milestone, bug, root cause, and fix that got this working.
+- [`docs/testing/README.md`](docs/testing/README.md) — how to test the mod on
+  your Mac and report results; helper scripts are in `scripts/testing/`.
 - [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) — building, running,
   debugging workflow, log markers, and contribution conventions.
 - [`docs/LOD-FLICKER-INVESTIGATION.md`](docs/LOD-FLICKER-INVESTIGATION.md) —
